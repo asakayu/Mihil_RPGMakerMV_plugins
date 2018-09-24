@@ -18,5 +18,5 @@
 
 
 
-コードレビュー歓迎します。
+コードレビュー歓迎します。  
 Please feel free to throw me Masakari!
