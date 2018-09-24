@@ -1,0 +1,172 @@
+//=============================================================================
+// Mihil_tweaks.js
+//=============================================================================
+/*:
+ * @plugindesc ゲームの快適化や修正など
+ * @author uta_asakayu
+ * @Thanks Sigureya, Tsumio, eyn_kenzaki, Plasma
+ * 
+ * 
+ * @param FadeMultiple
+ * @desc フェード(暗転)時間を何倍速にするか
+ * @type number
+ * @min 0.1
+ * @max 48
+ * @decimals 2
+ * @default 2
+ * 
+ * @param DisableTitleFade
+ * @desc タイトル画面を表示するための
+ * フェードインをなくします。動作高速化
+ * @type boolean
+ * @default false
+ * 
+ * @param DisableMessageInterval
+ * @desc メッセージの間に挟まる
+ * 操作を受け付けない時間をなくします
+ * @type boolean
+ * @default true
+ * 
+ * @param DisableAltkey
+ * @desc Controlキーと同じ動作に割り当てられている
+ * Altキーの動作を無効化します。
+ * @type boolean
+ * @default false
+ * 
+ * @param FixChoiceCursorUp
+ * @desc 選択肢デフォルトが[なし]の時、
+ * カーソル上を押すと下から2番目が選択される問題を修正
+ * @type boolean
+ * @default false
+ * 
+ * 
+ * @help
+ * 
+ *     FadeMultiple
+ * セーブファイルをロードした時の暗転時間を調節できます。
+ * プラグインパラメータ(FadeMultiple)の数値に合わせて、暗転が速くなります。
+ * 1未満の数値も入れられます。
+ * 48以上の値は意味ないかも。
+ * Scene_Load.prototype.onLoadSuccess
+ * を上書きします。
+ * 
+ *     DisableTitleFade
+ * タイトル画面を表示する時の、フェードインをなくします。
+ * 動作は高速化しますが、
+ * Scene_Title.prototype.start
+ * を上書きするのと、演出が犠牲になるかもしれません。
+ * 
+ *     DisableMessageInterval
+ * ツクール標準仕様だと、メッセージウィンドウで文字が表示しきってから、
+ * 10フレーム操作を受け付けないインターバルがあります。
+ * このインターバルを0にします。
+ * 
+ *     DisableAltkey
+ * Ctrlキーでメッセージスキップ、
+ * Altキーをスクリーンショットのホットキーに
+ * 割り当てている場合などのために、
+ * Altキーの役割をなくします。
+ * Input.keyMapper[18]
+ * を上書きします。
+ * 
+ *     FixChoiceCursorUp
+ * 選択肢のデフォルト設定が「なし」の時、
+ * 選択肢を開いた後に上キーを押すと、
+ * 最下部ではなく下から2番目の項目が選択される不具合を修正します。
+ * 
+ * 共存可能:
+ * LoadComSim.js ver1.00
+ * https://tm.lucky-duet.com/viewtopic.php?t=3085
+ * 選択肢拡張 ver. 3.7
+ * http://woodpenguin.web.fc2.com/MV_Plugin/MPP_ChoiceEX.html
+ * 
+ * ※コードレビュー歓迎します。
+ * Please feel free to throw me Masakari!
+ * 
+ * Ver2.0.0 タイトルフェードインなし、メッセージインターバルなし、Altキー無効化、選択肢fix機能追加
+ * Ver1.0.1 ~~おまけ(タイトル画面の暗転省略)を追加。
+ * 　　　　　コードを見てコメントアウトを外してください。~~
+ * Ver1.0.0 配布
+ * 
+ */
+
+
+(function() {
+    'use strict';
+// プラグインパラメータ設定
+    var createPluginParameter = function(pluginName) {
+        var paramReplacer = function(key, value) {
+            if (value === 'null') {
+                return value;
+            }
+            if (value[0] === '"' && value[value.length - 1] === '"') {
+                return value;
+            }
+            try {
+                return JSON.parse(value);
+            } catch (e) {
+                return value;
+            }
+        };
+        var parameter     = JSON.parse(JSON.stringify(PluginManager.parameters(pluginName), paramReplacer));
+        PluginManager.setParameters(pluginName, parameter);
+        return parameter;
+    };
+    var param = createPluginParameter('Mihil_tweaks');
+
+// ロード時のフェードアウト時間調整
+    Scene_Load.prototype.fadeOutLoad = function() {
+        var time = this.slowFadeSpeed() / 60;
+        time /= param.FadeMultiple
+        AudioManager.fadeOutBgm(time);
+        AudioManager.fadeOutBgs(time);
+        AudioManager.fadeOutMe(time);
+        this.startFadeOut(this.slowFadeSpeed() / param.FadeMultiple);
+    };
+    
+    Scene_Load.prototype.onLoadSuccess = function() {
+        SoundManager.playLoad();
+        this.fadeOutLoad();
+        this.reloadMapIfUpdated();
+        SceneManager.goto(Scene_Map);
+        this._loadSuccess = true;
+    };
+
+// タイトル画面フェードインなし
+    if(param.DisableTitleFade){
+        Scene_Title.prototype.start = function() {
+            Scene_Base.prototype.start.call(this);
+            SceneManager.clearStack();
+            this.centerSprite(this._backSprite1);
+            this.centerSprite(this._backSprite2);
+            this.playTitleMusic();
+            //this.startFadeIn(this.fadeSpeed(), false);
+        };
+    }
+
+// メッセージのインターバルをなくす
+    if(param.DisableMessageInterval){
+        const _Window_Message_startPause = Window_Message.prototype.startPause
+        Window_Message.prototype.startPause = function() {
+            _Window_Message_startPause.call(this)
+            this.startWait(0);
+        };
+    }
+
+// Altキーを無効化
+    if(param.DisableAltkey){
+        Input.keyMapper[18] = '';
+    }
+
+// 選択肢の修正
+    if(param.FixChoiceCursorUp){
+        var _Window_ChoiceList_cursorUp = Window_ChoiceList.prototype.cursorUp;
+        Window_ChoiceList.prototype.cursorUp = function (wrap) {
+            if (this.index() === -1 && $gameMessage.choiceDefaultType() === -1) {
+                this.select(0);
+            }
+            _Window_ChoiceList_cursorUp.call(this, wrap);
+        };
+    }
+
+})();
