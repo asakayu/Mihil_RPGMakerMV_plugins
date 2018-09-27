@@ -7,8 +7,9 @@
  * @Thanks Sigureya, Tsumio, eyn_kenzaki, Plasma
  * 
  * 
- * @param FadeMultiple
+ * @param LoadFadeMultiple
  * @desc フェード(暗転)時間を何倍速にするか
+ * (1.00でOFF)
  * @type number
  * @min 0.1
  * @max 48
@@ -27,6 +28,15 @@
  * @type boolean
  * @default true
  * 
+ * @param WindowShiftSpeed
+ * @desc ウィンドウの開閉速度を変更します
+ * 倍率指定(1.00でOFF)
+ * @type number
+ * @min 0.1
+ * @max 8
+ * @decimals 2
+ * @default 1
+ * 
  * @param DisableAltkey
  * @desc Controlキーと同じ動作に割り当てられている
  * Altキーの動作を無効化します。
@@ -42,9 +52,9 @@
  * 
  * @help
  * 
- *     FadeMultiple
+ *     LoadFadeMultiple
  * セーブファイルをロードした時の暗転時間を調節できます。
- * プラグインパラメータ(FadeMultiple)の数値に合わせて、暗転が速くなります。
+ * プラグインパラメータ(LoadFadeMultiple)の数値に合わせて、暗転が速くなります。
  * 1未満の数値も入れられます。
  * 48以上の値は意味ないかも。
  * Scene_Load.prototype.onLoadSuccess
@@ -60,6 +70,10 @@
  * ツクール標準仕様だと、メッセージウィンドウで文字が表示しきってから、
  * 10フレーム操作を受け付けないインターバルがあります。
  * このインターバルを0にします。
+ * 
+ *     WindowShiftSpeed
+ * ウィンドウを開いたり閉じたりする速度倍率を変更します。
+ * 8倍速で一瞬で開閉させられます。
  * 
  *     DisableAltkey
  * Ctrlキーでメッセージスキップ、
@@ -83,6 +97,8 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.1.0 WindowShiftSpeed(ウィンドウの開閉速度変更)追加、LoadFadeMultipleの数値が1.00の時は動作しないように。
+ *          FadeMultiple　→ LoadFadeMultiple　に名前変更。プラグインパラメータを設定し直してください。
  * Ver2.0.0 タイトルフェードインなし、メッセージインターバルなし、Altキー無効化、選択肢fix機能追加
  * Ver1.0.1 ~~おまけ(タイトル画面の暗転省略)を追加。
  * 　　　　　コードを見てコメントアウトを外してください。~~
@@ -115,22 +131,24 @@
     var param = createPluginParameter('Mihil_tweaks');
 
 // ロード時のフェードアウト時間調整
-    Scene_Load.prototype.fadeOutLoad = function() {
-        var time = this.slowFadeSpeed() / 60;
-        time /= param.FadeMultiple
-        AudioManager.fadeOutBgm(time);
-        AudioManager.fadeOutBgs(time);
-        AudioManager.fadeOutMe(time);
-        this.startFadeOut(this.slowFadeSpeed() / param.FadeMultiple);
-    };
-    
-    Scene_Load.prototype.onLoadSuccess = function() {
-        SoundManager.playLoad();
-        this.fadeOutLoad();
-        this.reloadMapIfUpdated();
-        SceneManager.goto(Scene_Map);
-        this._loadSuccess = true;
-    };
+    if(param.LoadFadeMultiple != 1){
+        Scene_Load.prototype.fadeOutLoad = function() {
+            var time = this.slowFadeSpeed() / 60;
+            time /= param.LoadFadeMultiple
+            AudioManager.fadeOutBgm(time);
+            AudioManager.fadeOutBgs(time);
+            AudioManager.fadeOutMe(time);
+            this.startFadeOut(this.slowFadeSpeed() / param.LoadFadeMultiple);
+        };
+        
+        Scene_Load.prototype.onLoadSuccess = function() {
+            SoundManager.playLoad();
+            this.fadeOutLoad();
+            this.reloadMapIfUpdated();
+            SceneManager.goto(Scene_Map);
+            this._loadSuccess = true;
+        };
+    }    
 
 // タイトル画面フェードインなし
     if(param.DisableTitleFade){
@@ -153,6 +171,25 @@
         };
     }
 
+// ウィンドウの開閉速度
+    if(param.WindowShiftSpeed != 1){
+        const _Window_Base_updateOpen = Window_Base.prototype.updateOpen
+        Window_Base.prototype.updateOpen = function() {
+            _Window_Base_updateOpen.call(this)
+            if (this._opening) {
+                this.openness -=32
+                this.openness += (32*param.WindowShiftSpeed)
+            }
+        }
+        const _Window_Base_updateClose = Window_Base.prototype.updateClose
+        Window_Base.prototype.updateClose = function() {
+            _Window_Base_updateClose.call(this)
+            if (this._closing) {
+                this.openness += 32;
+                this.openness -= (32*param.WindowShiftSpeed)
+            }
+        };
+    }
 // Altキーを無効化
     if(param.DisableAltkey){
         Input.keyMapper[18] = '';
