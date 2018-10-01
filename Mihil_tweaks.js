@@ -115,6 +115,7 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.2.1 SideCursorCanPageUpDownが常にオンになってしまっていた。
  * Ver2.2.0 SideCursorCanPageUpDown(左右キーでページ送り)追加。
  * Ver2.1.0 WindowShiftSpeed(ウィンドウの開閉速度変更)追加、LoadFadeMultipleの数値が1.00の時は動作しないように。
  *          FadeMultiple　→ LoadFadeMultiple　に名前変更。プラグインパラメータを設定し直してください。
@@ -215,29 +216,30 @@
     }
 
 // 選択肢の左右キーにページ送り機能を追加する
-Window_Selectable.prototype.cursorRight = function(wrap) {
-    var index = this.index();
-    var maxItems = this.maxItems();
-    var maxCols = this.maxCols();
-    if (maxCols >= 2 && (index < maxItems - 1 || (wrap && this.isHorizontal()))) {
-        this.select((index + 1) % maxItems);
-    } else if (maxCols <= 1 && this.topRow() + this.maxPageRows() < this.maxRows()) {
-        this.setTopRow(this.topRow() + this.maxPageRows());
-        this.select(Math.min(index + this.maxPageItems(), maxItems - 1));
-    }
-};
-
-Window_Selectable.prototype.cursorLeft = function(wrap) {
-    var index = this.index();
-    var maxItems = this.maxItems();
-    var maxCols = this.maxCols();
-    if (maxCols >= 2 && (index > 0 || (wrap && this.isHorizontal()))) {
-        this.select((index - 1 + maxItems) % maxItems);
-    } else if (maxCols <= 1 && this.topRow() > 0) {
-        this.setTopRow(this.topRow() - this.maxPageRows());
-        this.select(Math.max(index - this.maxPageItems(), 0));
-    }
-};
+if(param.SideCursorCanPageUpDown){
+    Window_Selectable.prototype.cursorRight = function(wrap) {
+        var index = this.index();
+        var maxItems = this.maxItems();
+        var maxCols = this.maxCols();
+        if (maxCols >= 2 && (index < maxItems - 1 || (wrap && this.isHorizontal()))) {
+            this.select((index + 1) % maxItems);
+        } else if (maxCols <= 1 && this.topRow() + this.maxPageRows() < this.maxRows()) {
+            this.setTopRow(this.topRow() + this.maxPageRows());
+            this.select(Math.min(index + this.maxPageItems(), maxItems - 1));
+        }
+    };
+    Window_Selectable.prototype.cursorLeft = function(wrap) {
+        var index = this.index();
+        var maxItems = this.maxItems();
+        var maxCols = this.maxCols();
+        if (maxCols >= 2 && (index > 0 || (wrap && this.isHorizontal()))) {
+            this.select((index - 1 + maxItems) % maxItems);
+        } else if (maxCols <= 1 && this.topRow() > 0) {
+            this.setTopRow(this.topRow() - this.maxPageRows());
+            this.select(Math.max(index - this.maxPageItems(), 0));
+        }
+    };
+}
 
 // 選択肢の修正
     if(param.FixChoiceCursorUp){
