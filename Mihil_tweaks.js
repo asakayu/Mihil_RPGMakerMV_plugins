@@ -43,6 +43,11 @@
  * @type boolean
  * @default false
  * 
+ * @param SideCursorCanPageUpDown
+ * @desc 選択肢の左右キーにページ送り機能を追加します
+ * @type boolean
+ * @default false
+
  * @param FixChoiceCursorUp
  * @desc 選択肢デフォルトが[なし]の時、
  * カーソル上を押すと下から2番目が選択される問題を修正
@@ -57,14 +62,16 @@
  * プラグインパラメータ(LoadFadeMultiple)の数値に合わせて、暗転が速くなります。
  * 1未満の数値も入れられます。
  * 48以上の値は意味ないかも。
+ * 1.00以外の数値にすると
  * Scene_Load.prototype.onLoadSuccess
  * を上書きします。
  * 
  *     DisableTitleFade
  * タイトル画面を表示する時の、フェードインをなくします。
- * 動作は高速化しますが、
+ * 動作は高速化しますが、演出が犠牲になるかもしれません。
+ * trueにすると
  * Scene_Title.prototype.start
- * を上書きするのと、演出が犠牲になるかもしれません。
+ * を上書きします。
  * 
  *     DisableMessageInterval
  * ツクール標準仕様だと、メッセージウィンドウで文字が表示しきってから、
@@ -80,7 +87,18 @@
  * Altキーをスクリーンショットのホットキーに
  * 割り当てている場合などのために、
  * Altキーの役割をなくします。
+ * trueにすると
  * Input.keyMapper[18]
+ * を上書きします。
+ * 
+ *     SideCursorCanPageUpDown
+ * 選択肢を選んでいる時に、
+ * 左右キーでもページ送りが出来たらと思ったことはありませんか？
+ * この機能をオンにすると、
+ * 左右キーにページ送りキーと同じ機能を追加できます。
+ * trueにすると
+ * Window_Selectable.prototype.cursorRight
+ * Window_Selectable.prototype.cursorLeft
  * を上書きします。
  * 
  *     FixChoiceCursorUp
@@ -97,6 +115,7 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.2.0 SideCursorCanPageUpDown(左右キーでページ送り)追加。
  * Ver2.1.0 WindowShiftSpeed(ウィンドウの開閉速度変更)追加、LoadFadeMultipleの数値が1.00の時は動作しないように。
  *          FadeMultiple　→ LoadFadeMultiple　に名前変更。プラグインパラメータを設定し直してください。
  * Ver2.0.0 タイトルフェードインなし、メッセージインターバルなし、Altキー無効化、選択肢fix機能追加
@@ -194,6 +213,31 @@
     if(param.DisableAltkey){
         Input.keyMapper[18] = '';
     }
+
+// 選択肢の左右キーにページ送り機能を追加する
+Window_Selectable.prototype.cursorRight = function(wrap) {
+    var index = this.index();
+    var maxItems = this.maxItems();
+    var maxCols = this.maxCols();
+    if (maxCols >= 2 && (index < maxItems - 1 || (wrap && this.isHorizontal()))) {
+        this.select((index + 1) % maxItems);
+    } else if (maxCols <= 1 && this.topRow() + this.maxPageRows() < this.maxRows()) {
+        this.setTopRow(this.topRow() + this.maxPageRows());
+        this.select(Math.min(index + this.maxPageItems(), maxItems - 1));
+    }
+};
+
+Window_Selectable.prototype.cursorLeft = function(wrap) {
+    var index = this.index();
+    var maxItems = this.maxItems();
+    var maxCols = this.maxCols();
+    if (maxCols >= 2 && (index > 0 || (wrap && this.isHorizontal()))) {
+        this.select((index - 1 + maxItems) % maxItems);
+    } else if (maxCols <= 1 && this.topRow() > 0) {
+        this.setTopRow(this.topRow() - this.maxPageRows());
+        this.select(Math.max(index - this.maxPageItems(), 0));
+    }
+};
 
 // 選択肢の修正
     if(param.FixChoiceCursorUp){
