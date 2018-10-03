@@ -8,13 +8,22 @@
  * 
  * 
  * @param LoadFadeMultiple
- * @desc フェード(暗転)時間を何倍速にするか
- * (1.00でOFF)
+ * @desc セーブロード時のフェード(暗転)時間を
+ * 何倍速にするか　(1.00でOFF)
  * @type number
  * @min 0.1
  * @max 48
  * @decimals 2
  * @default 2
+ * 
+ * @param MapFadeMultiple
+ * @desc マップ移動時のフェード(暗転)時間を
+ * 何倍速にするか　(1.00でOFF)
+ * @type number
+ * @min 0.1
+ * @max 24
+ * @decimals 2
+ * @default 1
  * 
  * @param DisableTitleFade
  * @desc タイトル画面を表示するための
@@ -60,10 +69,20 @@
  *     LoadFadeMultiple
  * セーブファイルをロードした時の暗転時間を調節できます。
  * プラグインパラメータ(LoadFadeMultiple)の数値に合わせて、暗転が速くなります。
- * 1未満の数値も入れられます。
+ * 1倍未満の数値も入れられます。(遅くなります)
  * 48以上の値は意味ないかも。
  * 1.00以外の数値にすると
  * Scene_Load.prototype.onLoadSuccess
+ * を上書きします。
+ * 
+ *     MapFadeMultiple
+ * マップを移動した時の暗転時間を調節できます。
+ * プラグインパラメータ(MapFadeMultiple)の数値に合わせて、暗転が速くなります。
+ * 1倍未満の数値も入れられます。(遅くなります)
+ * 24以上の値は意味ないかも。
+ * 1.00以外の数値にすると
+ * Scene_Map.prototype.fadeInForTransfer
+ * Scene_Map.prototype.fadeOutForTransfer
  * を上書きします。
  * 
  *     DisableTitleFade
@@ -170,6 +189,27 @@
         };
     }    
 
+// マップ移動時のフェード時間変更
+    if(param.MapFadeMultiple != 1){
+        Scene_Map.prototype.fadeInForTransfer = function() {
+            var fadeType = $gamePlayer.fadeType();
+            switch (fadeType) {
+            case 0: case 1:
+                const fadeSpeedMulti = this.fadeSpeed() / param.MapFadeMultiple
+                this.startFadeIn(fadeSpeedMulti, fadeType === 1);
+                break;
+            }
+        };
+        Scene_Map.prototype.fadeOutForTransfer = function() {
+            var fadeType = $gamePlayer.fadeType();
+            switch (fadeType) {
+            case 0: case 1:
+                const fadeSpeedMulti = this.fadeSpeed() / param.MapFadeMultiple
+                this.startFadeOut(fadeSpeedMulti, fadeType === 1);
+                break;
+            }
+        };
+    }
 // タイトル画面フェードインなし
     if(param.DisableTitleFade){
         Scene_Title.prototype.start = function() {
