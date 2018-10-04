@@ -6,6 +6,8 @@
  * @author uta_asakayu
  * @Thanks Sigureya, Tsumio, eyn_kenzaki, Plasma
  * 
+ * @param ………  Fade  …………………………………………
+ * @default ……………………………………………………………………………………
  * 
  * @param LoadFadeMultiple
  * @desc セーブロード時のフェード(暗転)時間を
@@ -31,6 +33,9 @@
  * @type boolean
  * @default false
  * 
+ * @param ………  Message   …………………………………………
+ * @default ……………………………………………………………………………………
+ * 
  * @param DisableMessageInterval
  * @desc メッセージの間に挟まる
  * 操作を受け付けない時間をなくします
@@ -46,11 +51,17 @@
  * @decimals 2
  * @default 1
  * 
+ * @param ………  tweak   …………………………………………
+ * @default ……………………………………………………………………………………
+ * 
  * @param DisableAltkey
  * @desc Controlキーと同じ動作に割り当てられている
  * Altキーの動作を無効化します。
  * @type boolean
  * @default false
+ * 
+ * @param ………  Choice fix  …………………………………………
+ * @default ……………………………………………………………………………………
  * 
  * @param SideCursorCanPageUpDown
  * @desc 選択肢の左右キーにページ送り機能を追加します
@@ -65,6 +76,8 @@
  * 
  * 
  * @help
+ * ゲームを高速化して快適性を増したり、
+ * MVのバグを修正したりします。
  * 
  *     LoadFadeMultiple
  * セーブファイルをロードした時の暗転時間を調節できます。
@@ -134,6 +147,8 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.3.1 レイアウトを調整
+ * Ver2.3.0 MapFadeMultiple機能追加
  * Ver2.2.1 SideCursorCanPageUpDownが常にオンになってしまっていた。
  * Ver2.2.0 SideCursorCanPageUpDown(左右キーでページ送り)追加。
  * Ver2.1.0 WindowShiftSpeed(ウィンドウの開閉速度変更)追加、LoadFadeMultipleの数値が1.00の時は動作しないように。
