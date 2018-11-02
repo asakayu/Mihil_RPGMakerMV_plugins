@@ -10,6 +10,8 @@
  * 
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
+ * 
+ * ver1.0.1 特定の条件下での進行不能バグ修正
 */
 
 
@@ -23,6 +25,7 @@ Game_Interpreter.prototype.command223 = function() {
         return true
     }
     _Game_Interpreter_command223.call(this)
+    return true
 };
 
 const _Game_Screen_startTint = Game_Screen.prototype.startTint
