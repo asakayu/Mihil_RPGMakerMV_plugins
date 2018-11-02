@@ -51,6 +51,15 @@
  * @decimals 2
  * @default 1
  * 
+ * @param BaloonAnimationMultiple
+ * @desc フキダシアイコンの表示速度を変更します
+ * 倍率指定(1.00でOFF)
+ * @type number
+ * @min 0.1
+ * @max 64
+ * @decimals 2
+ * @default 1
+ * 
  * @param ………  tweak   …………………………………………
  * @default ……………………………………………………………………………………
  * 
@@ -114,6 +123,14 @@
  * ウィンドウを開いたり閉じたりする速度倍率を変更します。
  * 8倍速で一瞬で開閉させられます。
  * 
+ *     BaloonAnimationMultiple
+ * フキダシアイコンの表示速度を変更します。
+ * 標準で付与される12フレームのウェイトもカットしました。
+ * 1.00以外の数値にすると
+ * Sprite_Balloon.prototype.speed
+ * Sprite_Balloon.prototype.waitTime
+ * を上書きします
+ * 
  *     DisableAltkey
  * Ctrlキーでメッセージスキップ、
  * Altキーをスクリーンショットのホットキーに
@@ -147,6 +164,7 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.4.0 BaloonAnimationMultiple(フキダシアイコン表示速度変更)を追加
  * Ver2.3.1 レイアウトを調整
  * Ver2.3.0 MapFadeMultiple機能追加
  * Ver2.2.1 SideCursorCanPageUpDownが常にオンになってしまっていた。
@@ -265,6 +283,28 @@
             }
         };
     }
+
+// フキダシアイコンの表示速度
+    if(param.BaloonAnimationMultiple != 1){
+        Sprite_Balloon.prototype.speed = function() {
+            return 8/param.BaloonAnimationMultiple
+        };
+        Sprite_Balloon.prototype.waitTime = function() {
+            return 0
+        };
+        /*没
+        const _Sprite_Balloon_setup = Sprite_Balloon.prototype.setup
+        Sprite_Balloon.prototype.setup = function(balloonId) {
+            _Sprite_Balloon_setup.call(this, arguments)
+            this._duration = 8 * this.speed() / param.BaloonAnimationMultiple + this.waitTime()
+        };
+        Sprite_Balloon.prototype.frameIndex = function() {
+            var index = (this._duration - this.waitTime()) / this.speed() / param.BaloonAnimationMultiple
+            return 7 - Math.max(Math.floor(index), 0);
+        };
+        */
+    }
+
 // Altキーを無効化
     if(param.DisableAltkey){
         Input.keyMapper[18] = '';
