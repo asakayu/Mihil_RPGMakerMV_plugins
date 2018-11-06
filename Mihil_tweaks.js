@@ -33,6 +33,13 @@
  * @type boolean
  * @default false
  * 
+ * @param DisableNewgameFade
+ * @desc ニューゲーム選択時の
+ * フェードアウトをなくします。動作高速化
+ * @type boolean
+ * @default false
+ * 
+ * 
  * @param ………  Message   …………………………………………
  * @default ……………………………………………………………………………………
  * 
@@ -110,9 +117,11 @@
  *     DisableTitleFade
  * タイトル画面を表示する時の、フェードインをなくします。
  * 動作は高速化しますが、演出が犠牲になるかもしれません。
- * trueにすると
- * Scene_Title.prototype.start
- * を上書きします。
+ * 
+ *     DisableNewgameFade
+ * ニューゲーム開始時の、フェードアウトをなくします。
+ * 動作は高速化しますが、演出が犠牲になるかもしれません。
+ * 
  * 
  *     DisableMessageInterval
  * ツクール標準仕様だと、メッセージウィンドウで文字が表示しきってから、
@@ -164,6 +173,8 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.5.0 Scene_Title.prototype.startの上書きをフックに改善
+ *          DisableNewgameFadeを追加
  * Ver2.4.0 BaloonAnimationMultiple(フキダシアイコン表示速度変更)を追加
  * Ver2.3.1 レイアウトを調整
  * Ver2.3.0 MapFadeMultiple機能追加
@@ -245,13 +256,20 @@
     }
 // タイトル画面フェードインなし
     if(param.DisableTitleFade){
+        const _Scene_Title_start = Scene_Title.prototype.start
         Scene_Title.prototype.start = function() {
-            Scene_Base.prototype.start.call(this);
-            SceneManager.clearStack();
-            this.centerSprite(this._backSprite1);
-            this.centerSprite(this._backSprite2);
-            this.playTitleMusic();
-            //this.startFadeIn(this.fadeSpeed(), false);
+            _Scene_Title_start.apply(this, arguments)
+            this._fadeDuration = 1
+        };
+    }
+
+// ニューゲームフェードアウトなし
+
+    if(param.DisableNewgameFade){
+        const _Scene_Title_commandNewGame = Scene_Title.prototype.commandNewGame
+        Scene_Title.prototype.commandNewGame = function() {
+            _Scene_Title_commandNewGame.apply(this, arguments)
+            this.startFadeOut(1)
         };
     }
 
