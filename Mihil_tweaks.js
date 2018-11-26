@@ -46,8 +46,10 @@
  * @param DisableMessageInterval
  * @desc メッセージの間に挟まる
  * 操作を受け付けない時間をなくします
- * @type boolean
- * @default true
+ * @type number
+ * @min 0
+ * @max 100
+ * @default 10
  * 
  * @param WindowShiftSpeed
  * @desc ウィンドウの開閉速度を変更します
@@ -67,7 +69,7 @@
  * @decimals 2
  * @default 1
  * 
- * @param ………  tweak   …………………………………………
+ * @param ………  InputTweak   …………………………………………
  * @default ……………………………………………………………………………………
  * 
  * @param DisableAltkey
@@ -75,6 +77,14 @@
  * Altキーの動作を無効化します。
  * @type boolean
  * @default false
+ * 
+ * @param KeyRepeatSpeed
+ * @desc キー押しっぱなしの時の、連打速度を変更します
+ * フレーム指定(6でOFF)
+ * @type number
+ * @min 1
+ * @max 60
+ * @default 6
  * 
  * @param ………  Choice fix  …………………………………………
  * @default ……………………………………………………………………………………
@@ -94,6 +104,8 @@
  * @help
  * ゲームを高速化して快適性を増したり、
  * MVのバグを修正したりします。
+ * 
+ * -------高速化--------
  * 
  *     LoadFadeMultiple
  * セーブファイルをロードした時の暗転時間を調節できます。
@@ -126,7 +138,8 @@
  *     DisableMessageInterval
  * ツクール標準仕様だと、メッセージウィンドウで文字が表示しきってから、
  * 10フレーム操作を受け付けないインターバルがあります。
- * このインターバルを0にします。
+ * このインターバルを数値変更します。
+ * 値が10だと無効になります。
  * 
  *     WindowShiftSpeed
  * ウィンドウを開いたり閉じたりする速度倍率を変更します。
@@ -140,6 +153,8 @@
  * Sprite_Balloon.prototype.waitTime
  * を上書きします
  * 
+ * -------入力の快適化--------
+ * 
  *     DisableAltkey
  * Ctrlキーでメッセージスキップ、
  * Altキーをスクリーンショットのホットキーに
@@ -148,6 +163,17 @@
  * trueにすると
  * Input.keyMapper[18]
  * を上書きします。
+ * 
+ *     KeyRepeatSpeed
+ * ツクールMVは今までのツクールと違い、キーをしばらく押しっぱなしにすると
+ * 連打する仕様になりました。
+ * その時の連打速度を変更します。値が小さい方が速いです。
+ * デフォルトの値である6以外にすると、
+ * Input.keyRepeatInterval
+ * TouchInput.keyRepeatInterval
+ * を上書きします
+ * 
+ * -------本体の快適化・修正--------
  * 
  *     SideCursorCanPageUpDown
  * 選択肢を選んでいる時に、
@@ -173,6 +199,8 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.6.1 DisableMessageIntervalを数値変更するように
+ * Ver2.6.0 KeyRepeatSpeedを追加。Descriptionをカテゴライズ
  * Ver2.5.0 Scene_Title.prototype.startの上書きをフックに改善
  *          DisableNewgameFadeを追加
  * Ver2.4.0 BaloonAnimationMultiple(フキダシアイコン表示速度変更)を追加
@@ -274,11 +302,11 @@
     }
 
 // メッセージのインターバルをなくす
-    if(param.DisableMessageInterval){
+    if(param.DisableMessageInterval != 10){
         const _Window_Message_startPause = Window_Message.prototype.startPause
         Window_Message.prototype.startPause = function() {
             _Window_Message_startPause.call(this)
-            this.startWait(0);
+            this.startWait(param.DisableMessageInterval);
         };
     }
 
@@ -323,10 +351,32 @@
         */
     }
 
+
 // Altキーを無効化
     if(param.DisableAltkey){
         Input.keyMapper[18] = '';
     }
+
+// キーリピートの速度変更
+    if(param.KeyRepeatSpeed != 6){
+        /**
+         * The interval of the key repeat in frames.
+         *
+         * @static
+         * @property keyRepeatInterval
+         * @type Number
+         */
+        Input.keyRepeatInterval = param.KeyRepeatSpeed || 6;    /**
+         * The interval of the pseudo key repeat in frames.
+         *
+         * @static
+         * @property keyRepeatInterval
+         * @type Number
+         */
+        TouchInput.keyRepeatInterval = param.KeyRepeatSpeed || 6;
+    }
+
+
 
 // 選択肢の左右キーにページ送り機能を追加する
 if(param.SideCursorCanPageUpDown){
