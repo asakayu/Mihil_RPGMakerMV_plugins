@@ -3,7 +3,9 @@
 
 ## Math.rand.js
 スクリプトで乱数を発生させる時、いちいち  
-Math.floor( Math.random() * ( max+1-min ) +min )  
+```js
+Math.floor( Math.random() * ( max+1-min ) +min )
+```  
 と打つのは面倒じゃありませんか？  
 このプラグインでグローバル空間にMath.rand()を追加します。  
 スクリプトでMath.rand(min,max)と打つと、minからmaxまでの乱数を出してくれます。  
