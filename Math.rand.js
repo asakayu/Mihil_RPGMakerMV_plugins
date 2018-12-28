@@ -4,6 +4,7 @@
 /*:
  * @plugindesc 乱数を発生させるグローバル関数を追加します
  * @author uta_asakayu
+ * @thanks plasma
  * 
  * @help
  * 乱数を発生させるグローバル関数、
