@@ -32,6 +32,7 @@
  * ※コードレビュー歓迎しています。
  * Please feel free to throw me Masakari!
  * 
+ * Ver1.1.1 this._currentBgm表記をまとめてすっきりさせた
  * Ver1.1.0 インデントを揃えた。
  *          音量を変更した後再びAudioManager.currentxxxVolumeすると
  *          音量が正しく表記されなかった
@@ -52,13 +53,7 @@ Object.defineProperty(AudioManager, 'currentBgmVolume', {
     },
     set: function(value) {
         this.changeCurrentBgmVolume(value)
-        this.updateBgmParameters({
-            name: this._currentBgm.name,
-            pan: this._currentBgm.pan,
-            pitch: this._currentBgm.pitch,
-            pos: this._currentBgm.pos,
-            volume: value
-        });
+        this.updateBgmParameters(this._currentBgm);
     },
     configurable: true
 });
@@ -68,13 +63,7 @@ Object.defineProperty(AudioManager, 'currentBgsVolume', {
     },
     set: function(value) {
         this.changeCurrentBgsVolume(value)
-        this.updateBgsParameters({
-            name: this._currentBgs.name,
-            pan: this._currentBgs.pan,
-            pitch: this._currentBgs.pitch,
-            pos: this._currentBgs.pos,
-            volume: value
-      });
+        this.updateBgsParameters(this._currentBgm);
     },
     configurable: true
 });
