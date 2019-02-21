@@ -32,37 +32,49 @@
  * ※コードレビュー歓迎しています。
  * Please feel free to throw me Masakari!
  * 
+ * Ver1.1.0 インデントを揃えた。
+ *          音量を変更した後再びAudioManager.currentxxxVolumeすると
+ *          音量が正しく表記されなかった
  * Ver1.0.0 配布
  */
 //-----------------------------------------------------------------------------
 
+AudioManager.changeCurrentBgmVolume = function(value){
+    this._currentBgm.volume = value
+}
+AudioManager.changeCurrentBgsVolume = function(value){
+    this._currentBgs.volume = value
+}
+
 Object.defineProperty(AudioManager, 'currentBgmVolume', {
-  get: function() {
-      return this._currentBgm.volume;
-  },
-  set: function(value) {
-      this.updateBgmParameters({
-          name: this._currentBgm.name,
-          pan: this._currentBgm.pan,
-          pitch: this._currentBgm.pitch,
-          pos: this._currentBgm.pos,
-          volume: value
-      });
-  },
-  configurable: true
+    get: function() {
+        return this._currentBgm.volume;
+    },
+    set: function(value) {
+        this.changeCurrentBgmVolume(value)
+        this.updateBgmParameters({
+            name: this._currentBgm.name,
+            pan: this._currentBgm.pan,
+            pitch: this._currentBgm.pitch,
+            pos: this._currentBgm.pos,
+            volume: value
+        });
+    },
+    configurable: true
 });
 Object.defineProperty(AudioManager, 'currentBgsVolume', {
-  get: function() {
-      return this._currentBgs.volume;
-  },
-  set: function(value) {
-      this.updateBgsParameters({
-          name: this._currentBgs.name,
-          pan: this._currentBgs.pan,
-          pitch: this._currentBgs.pitch,
-          pos: this._currentBgs.pos,
-          volume: value
+    get: function() {
+        return this._currentBgs.volume;
+    },
+    set: function(value) {
+        this.changeCurrentBgsVolume(value)
+        this.updateBgsParameters({
+            name: this._currentBgs.name,
+            pan: this._currentBgs.pan,
+            pitch: this._currentBgs.pitch,
+            pos: this._currentBgs.pos,
+            volume: value
       });
-  },
-  configurable: true
+    },
+    configurable: true
 });
