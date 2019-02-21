@@ -11,6 +11,14 @@ Math.floor( Math.random() * ( max+1-min ) +min )
 スクリプトでMath.rand(min,max)と打つと、minからmaxまでの乱数を出してくれます。  
 Math.rand(max,min)と反転させたり、Math.rand(max)とだけ省略しても動きます。  
 
+## Mihil_CurrentVolume
+既に鳴らしているBGMやBGSの音量をスクリプトで変更できます。
+BGMの場合はエディタのスクリプトコマンドを開いて
+AudioManager.currentBgmVolume = 変更したい音量
+BGSの場合は
+AudioManager.currentBgsVolume = 変更したい音量
+を書けば即座に音量が切り替わります。
+
 ## Mihil_tweaks.js
 ゲームを快適にしたり、ツクールMV本体のバグを修正するための  
 細々とした変更のまとめです。
