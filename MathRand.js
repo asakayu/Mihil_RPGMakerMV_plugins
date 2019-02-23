@@ -4,7 +4,7 @@
 /*:
  * @plugindesc 乱数を発生させるグローバル関数を追加します
  * @author uta_asakayu
- * @thanks plasma
+ * @thanks plasma, @TsumioNtGame
  * 
  * @help
  * 乱数を発生させるグローバル関数、
@@ -35,6 +35,7 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.1.0 try-catchのエラー判定を関数化。スタックトレースも出るように
  * Ver2.0.0 Math.randper()を追加
  *          エラーの可能性にも対応
  * Ver1.0.1 Remove punkt from filename.
@@ -53,7 +54,15 @@
  * @return {Number} random min to max
  */
 Math.rand = function(min, max) {// 1未満の少数は1に切り上げ
-    const funcName = 'Math.rand'
+    function tryCatchAlert(errorMessage){
+        try {
+            throw new Error(errorMessage)
+        } catch (e) {
+            console.error(e)
+            alert(e.message)
+        }
+    }
+   const funcName = 'Math.rand'
     min = min || 0
     max = max || 0
     if(min>0 && min<1){
@@ -66,18 +75,10 @@ Math.rand = function(min, max) {// 1未満の少数は1に切り上げ
         return Math.rand(max, min)
     }
     if(!Number.isFinite(max)){
-        try {
-            throw new Error(`${funcName}関数の引数maxが数値でありません！`)
-        } catch (e) {
-            alert(e.message)
-        }
+        tryCatchAlert(`${funcName}関数の引数maxが数値でありません！`)
     }    
     if(!Number.isFinite(min)){
-        try {
-            throw new Error(`${funcName}関数の引数minが数値でありません！`)
-        } catch (e) {
-            alert(e.message)
-        }
+        tryCatchAlert(`${funcName}関数の引数minが数値でありません！`)
     }    
     //console.log(`Math.rand min=${min}, max=${max}`)
     return Math.floor( Math.random() * ( Number(max)+1-Number(min) ) +Number(min) )
@@ -93,22 +94,22 @@ Math.rand = function(min, max) {// 1未満の少数は1に切り上げ
  * @return {Number} Probability calculation on weight/max percent
  */
 Math.randper = function(weight, max){// maxは省略可能
+    function tryCatchAlert(errorMessage){
+        try {
+            throw new Error(errorMessage)
+        } catch (e) {
+            console.error(e)
+            alert(e.message)
+        }
+    }
     const funcName = 'Math.randper'
     max = max || 100
     const min = 1
     if(!Number.isFinite(max)){
-        try {
-            throw new Error(`${funcName}関数の引数maxが数値でありません！`)
-        } catch (e) {
-            alert(e.message)
-        }
+        tryCatchAlert(`${funcName}関数の第二引数(${max})が数値でありません！`)
     }
     if(!Number.isFinite(weight)){
-        try {
-            throw new Error(`${funcName}関数の引数weightが数値でありません！`)
-        } catch (e) {
-            alert(e.message)
-        }
+        tryCatchAlert(`${funcName}関数の第一引数(${weight})が数値でありません！`)
     }
     const rand = Math.floor( Math.random() * ( Number(max)+1-Number(min) ) ) +Number(min)
         return rand <= weight
