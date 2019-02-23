@@ -26,7 +26,7 @@
  * maxは省略可能です。その場合maxは100になります。
  * 条件分岐にMath.randper(33)と入力すると
  * 33%の確率でtrueを返してくれます。
- * Math.ransper(33,200)だと
+ * Math.randper(33,200)だと
  * 33/200の確率でtrueを返してくれます。
  * 
  * エディタの「条件分岐」コマンドでも使えたりして便利です。
@@ -35,6 +35,7 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.1.1 誤字修正
  * Ver2.1.0 try-catchのエラー判定を関数化。スタックトレースも出るように
  * Ver2.0.0 Math.randper()を追加
  *          エラーの可能性にも対応
