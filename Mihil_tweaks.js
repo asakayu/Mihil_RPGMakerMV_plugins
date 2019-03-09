@@ -16,7 +16,7 @@
  * @min 0.1
  * @max 48
  * @decimals 2
- * @default 2
+ * @default 1.00
  * 
  * @param MapFadeMultiple
  * @desc マップ移動時のフェード(暗転)時間を
@@ -25,10 +25,10 @@
  * @min 0.1
  * @max 24
  * @decimals 2
- * @default 1
+ * @default 1.00
  * 
  * @param DisableTitleFade
- * @desc タイトル画面を表示するための
+ * @desc ゲーム開始時タイトル画面を表示するための
  * フェードインをなくします。動作高速化
  * @type boolean
  * @default false
@@ -45,7 +45,7 @@
  * 
  * @param DisableMessageInterval
  * @desc メッセージの間に挟まる
- * 操作を受け付けない時間をなくします
+ * 操作を受け付けない時間を減らします(10でOFF)
  * @type number
  * @min 0
  * @max 100
@@ -58,7 +58,7 @@
  * @min 0.1
  * @max 8
  * @decimals 2
- * @default 1
+ * @default 1.00
  * 
  * @param BaloonAnimationMultiple
  * @desc フキダシアイコンの表示速度を変更します
@@ -67,7 +67,7 @@
  * @min 0.1
  * @max 64
  * @decimals 2
- * @default 1
+ * @default 1.00
  * 
  * @param ………  InputTweak   …………………………………………
  * @default ……………………………………………………………………………………
@@ -105,9 +105,6 @@
  * ゲームを高速化して快適性を増したり、
  * MVのバグを修正したりします。
  * 
- * 設定項目はたくさんありますが、
- * ONにしなければ変更されない安心設計です
- * 
  * -------高速化--------
  * 
  *     LoadFadeMultiple
@@ -142,7 +139,8 @@
  * ツクール標準仕様だと、メッセージウィンドウで文字が表示しきってから、
  * 10フレーム操作を受け付けないインターバルがあります。
  * このインターバルを数値変更します。
- * 値が10だと無効になります。
+ * 値が0だとウェイトなし、
+ * 10だと無効になります。
  * 
  *     WindowShiftSpeed
  * ウィンドウを開いたり閉じたりする速度倍率を変更します。
@@ -202,6 +200,7 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.6.2 デフォルトのパラメータを全てOFFの値に設定。
  * Ver2.6.1 DisableMessageIntervalを数値変更するように
  * Ver2.6.0 KeyRepeatSpeedを追加。Descriptionをカテゴライズ
  * Ver2.5.0 Scene_Title.prototype.startの上書きをフックに改善
