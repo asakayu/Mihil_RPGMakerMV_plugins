@@ -100,6 +100,14 @@
  * @type boolean
  * @default false
  * 
+ * @param ………  fix  …………………………………………
+ * @default ……………………………………………………………………………………
+ * 
+ * @param FixGraphicsRender
+ * @desc たまに音楽だけ鳴って画面が固まる不具合を修正します
+ * @type boolean
+ * @default false
+ * 
  * 
  * @help
  * ゲームを高速化して快適性を増したり、
@@ -191,6 +199,16 @@
  * 選択肢を開いた後に上キーを押すと、
  * 最下部ではなく下から2番目の項目が選択される不具合を修正します。
  * 
+ *     FixGraphicsRender
+ * ツクールMVの本体バージョンが1.6.1以下、
+ * かつコミュニティ版コアスクリプトのv1.3bを導入していない場合に
+ * サウンドだけ鳴り続けて画面が固まってしまう不具合を修正します。
+ * (つまり、コミュニティ版コアスクリプトのv1.3b以上を導入している方は不要です)
+ * trueにすると
+ * Graphics.render
+ * を上書きします。
+ * 
+ * 
  * 共存可能:
  * LoadComSim.js ver1.00
  * https://tm.lucky-duet.com/viewtopic.php?t=3085
@@ -200,6 +218,7 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.7.0 FixGraphicsRenderを追加
  * Ver2.6.2 デフォルトのパラメータを全てOFFの値に設定。
  * Ver2.6.1 DisableMessageIntervalを数値変更するように
  * Ver2.6.0 KeyRepeatSpeedを追加。Descriptionをカテゴライズ
@@ -414,6 +433,36 @@ if(param.SideCursorCanPageUpDown){
                 this.select(0);
             }
             _Window_ChoiceList_cursorUp.call(this, wrap);
+        };
+    }
+
+// FixGraphicsRender
+    if(param.FixGraphicsRender){
+        /**
+         * Renders the stage to the game screen.
+         *
+         * @static
+         * @method render
+         * @param {Stage} stage The stage object to be rendered
+         */
+        Graphics.render = function(stage) {
+            if (this._skipCount <= 0) {
+                var startTime = Date.now();
+                if (stage) {
+                    this._renderer.render(stage);
+                    if (this._renderer.gl && this._renderer.gl.flush) {
+                        this._renderer.gl.flush();
+                    }
+                }
+                var endTime = Date.now();
+                var elapsed = endTime - startTime;
+                this._skipCount = Math.min(Math.floor(elapsed / 15), this._maxSkip);
+                this._rendered = true;
+            } else {
+                this._skipCount--;
+                this._rendered = false;
+            }
+            this.frameCount++;
         };
     }
 
