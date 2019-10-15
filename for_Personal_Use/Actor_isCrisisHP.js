@@ -2,6 +2,9 @@
 // Actor_isCrisisHP.js
 //
 //=============================================================================
+// Copyright (c) 2018-2019 uta_asakayu
+// Released under the MIT license.
+// http://opensource.org/licenses/mit-license.php
 /*:
  * @plugindesc isDying()の代わりにHP危険色の条件を残す
  * @author uta_asakayu

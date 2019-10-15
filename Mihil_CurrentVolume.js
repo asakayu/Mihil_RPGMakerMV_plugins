@@ -4,6 +4,9 @@
 // Released under the MIT license
 // http://opensource.org/licenses/mit-license.php
 //=============================================================================
+// Copyright (c) 2018-2019 uta_asakayu
+// Released under the MIT license.
+// http://opensource.org/licenses/mit-license.php
 /*:
  * @plugindesc 今鳴っているBGMとBGSの音量を変更できます
  * 

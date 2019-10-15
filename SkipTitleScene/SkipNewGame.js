@@ -2,6 +2,9 @@
 // SkipNewGame.js
 //
 //=============================================================================
+// Copyright (c) 2018-2019 uta_asakayu
+// Released under the MIT license.
+// http://opensource.org/licenses/mit-license.php
 /*:
  * @plugindesc ニューゲーム時タイトル画面省略
  * @author uta_asakayu

@@ -1,6 +1,9 @@
 //=============================================================================
 // MathRand.js
 //=============================================================================
+// Copyright (c) 2018-2019 uta_asakayu
+// Released under the MIT license.
+// http://opensource.org/licenses/mit-license.php
 /*:
  * @plugindesc 乱数を発生させるグローバル関数を追加します
  * @author uta_asakayu

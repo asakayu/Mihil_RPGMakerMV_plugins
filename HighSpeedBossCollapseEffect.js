@@ -2,6 +2,9 @@
 // HighSpeedBossCollapseEffect.js
 //
 //=============================================================================
+// Copyright (c) 2018-2019 uta_asakayu
+// Released under the MIT license.
+// http://opensource.org/licenses/mit-license.php
 /*:
  * @plugindesc ボスの消滅エフェクトを高速化します
  * @author uta_asakayu

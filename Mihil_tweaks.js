@@ -1,6 +1,9 @@
 //=============================================================================
 // Mihil_tweaks.js
 //=============================================================================
+// Copyright (c) 2018-2019 uta_asakayu
+// Released under the MIT license.
+// http://opensource.org/licenses/mit-license.php
 /*:
  * @plugindesc ゲームの快適化や修正など
  * @author uta_asakayu
