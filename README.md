@@ -1,12 +1,22 @@
 # Mihil_RPGMakerMV_plugins
 作ったツクールMVのプラグインを置いていきます
 
+## Columns_Plural.js
+選択肢の列(横の並び)を2列以上にできます。  
+木星ペンギンさんの  
+[選択肢拡張プラグインv3.5](http://woodpenguin.web.fc2.com/rgss3/choice_ex.html)  
+と互換性があります。  
+  
+詳細やスクショなどは  
+[ツクマテの記事](https://tm.lucky-duet.com/viewtopic.php?f=5&t=6270&sid=abba4f34a739591fd65bfd78a2e5277d)  
+に。
+
 ## Math.rand.js
 スクリプトで乱数を発生させる時、いちいち  
 ```js
 Math.floor( Math.random() * ( max+1-min ) +min )
 ```  
-と打つのは面倒じゃありませんか？  
+と打つのって面倒ですよね？  
 このプラグインでグローバル空間にMath.rand()を追加します。  
 スクリプトでMath.rand(min,max)と打つと、minからmaxまでの乱数を出してくれます。  
 Math.rand(max,min)と反転させたり、Math.rand(max)とだけ省略しても動きます。  
