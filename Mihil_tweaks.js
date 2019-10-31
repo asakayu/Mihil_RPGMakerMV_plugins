@@ -96,7 +96,13 @@
  * @desc 選択肢の左右キーにページ送り機能を追加します
  * @type boolean
  * @default false
-
+ * 
+ * @param SideCursorCanLoop
+ * @desc 選択肢の左右キーが最初と最後でループするように
+ * ページ送り機能がオンの時のみ
+ * @type boolean
+ * @default false
+ * 
  * @param FixChoiceCursorUp
  * @desc 選択肢デフォルトが[なし]の時、
  * カーソル上を押すと下から2番目が選択される問題を修正
@@ -221,6 +227,8 @@
  * ※コードレビュー歓迎します。
  * Please feel free to throw me Masakari!
  * 
+ * Ver2.8.0 SideCursorCanLoopを追加
+ * Ver2.7.1 MITライセンスを追加
  * Ver2.7.0 FixGraphicsRenderを追加
  * Ver2.6.2 デフォルトのパラメータを全てOFFの値に設定。
  * Ver2.6.1 DisableMessageIntervalを数値変更するように
@@ -408,7 +416,10 @@ if(param.SideCursorCanPageUpDown){
         var index = this.index();
         var maxItems = this.maxItems();
         var maxCols = this.maxCols();
-        if (maxCols >= 2 && (index < maxItems - 1 || (wrap && this.isHorizontal()))) {
+        console.log(`index=${index}, maxItems=${maxItems}`)
+        if(maxCols >= 2 && index===maxItems-1 && param.SideCursorCanLoop){
+            this.select(0);
+        } else if (maxCols >= 2 && (index < maxItems - 1 || (wrap && this.isHorizontal()))) {
             this.select((index + 1) % maxItems);
         } else if (maxCols <= 1 && this.topRow() + this.maxPageRows() < this.maxRows()) {
             this.setTopRow(this.topRow() + this.maxPageRows());
@@ -419,7 +430,9 @@ if(param.SideCursorCanPageUpDown){
         var index = this.index();
         var maxItems = this.maxItems();
         var maxCols = this.maxCols();
-        if (maxCols >= 2 && (index > 0 || (wrap && this.isHorizontal()))) {
+        if(maxCols >= 2 && index===0 && param.SideCursorCanLoop){
+            this.select(maxItems-1);
+        } else if (maxCols >= 2 && (index > 0 || (wrap && this.isHorizontal()))) {
             this.select((index - 1 + maxItems) % maxItems);
         } else if (maxCols <= 1 && this.topRow() > 0) {
             this.setTopRow(this.topRow() - this.maxPageRows());
