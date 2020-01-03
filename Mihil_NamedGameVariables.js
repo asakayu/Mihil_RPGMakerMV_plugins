@@ -48,6 +48,7 @@
  * 　(スイッチと変数で被るのは大丈夫です)
  * 
  * 
+ * Ver1.0.1 $gameSwitches.setValueが動かなかった
  * Ver1.0.0 初版配布
  * 
  */
@@ -99,7 +100,7 @@
         if(canCastNumber(switchId)){
             return _Game_Switches_setValue.call(this, switchId, value);
         } else if(isString(switchId)){
-            const index = $dataSystem.Switches.findIndex(valName => valName === switchId)
+            const index = $dataSystem.switches.findIndex(valName => valName === switchId)
             if(index>=0){ 
                 return _Game_Switches_setValue.call(this, index, value)
             }
