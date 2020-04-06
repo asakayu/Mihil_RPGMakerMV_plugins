@@ -59,12 +59,17 @@ AudioManager.currentBgsVolume = 変更したい音量
 ゲーム起動時に、ニューゲームやロード画面をスキップできます。
 
 ## 講座
+## 中級
 ツクールMVをもっと便利に。記事へのリンクです。  
 ### ツクールMVのスクリプトで文章の表示を行う方法＋＋
 https://note.mu/asakayu/n/n6f4987e21222  
 
 ### ツクールMVのスクリプトで文章の表示を行う方法＋
 https://note.mu/asakayu/n/n5611ef004b23  
+
+## 上級
+### Visual Studio CodeでツクールMVをデバッグ～NW.js(ローカル環境)編～
+https://qiita.com/asakayu/items/a68440e597373aabba02
 
 ## ライセンス
 MITライセンスについての記述のないプラグインを利用したい場合はご相談ください。
