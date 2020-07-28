@@ -11,6 +11,10 @@
 [ツクマテの記事](https://tm.lucky-duet.com/viewtopic.php?f=5&t=6270&sid=abba4f34a739591fd65bfd78a2e5277d)  
 に。
 
+## [Mihil_EventPageCondition.js](https://github.com/asakayu/Mihil_RPGMakerMV_plugins/blob/master/Mihil_EventPageCondition.js)
+イベントページの出現条件をスクリプトで制御できるようになります。
+スクリプトの知識がある方向けです。
+
 ## [Math.rand.js](https://github.com/asakayu/Mihil_RPGMakerMV_plugins/blob/master/MathRand.js)
 スクリプトで乱数を発生させる時、いちいち  
 ```js
