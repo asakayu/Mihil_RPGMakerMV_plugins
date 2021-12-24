@@ -53,7 +53,7 @@
 
 var parameters = PluginManager.parameters('Columns_Plural');
 const _columns_Quantity = parameters['columns_Variables'];
-const columns_initOnClose = parameters['InitOnClose'] || false;
+const columns_initOnClose = JSON.parse(parameters['InitOnClose'] || "false");
 
 const _Game_Interpreter_pluginCommand      = Game_Interpreter.prototype.pluginCommand;
 Game_Interpreter.prototype.pluginCommand = function (command, args) {
