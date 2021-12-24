@@ -14,6 +14,10 @@
  * $gameScreen.erasePicturesExcludes(1,2,3)
  * だとピクチャID1,2,3のピクチャだけが画面に残ります。
  * 
+ * $gameScreen.erasePicturesExcludes()
+ * だと全てのピクチャが消えますが、
+ * $gameScreen.clearPictures()で消したほうが速いです。
+ * 
  * $gameScreen.erasePicturesIncludes(消去するピクチャID)
  * で括弧の中に入れたIDのピクチャを消去します。
  * $gameScreen.erasePicturesIncludes(1,3,9)
